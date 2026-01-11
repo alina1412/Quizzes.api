@@ -3,6 +3,13 @@ asyncio_default_fixture_loop_scope = "function"
 log_cli = 1
 log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
 
+[tool.black]
+line-length = 80
+
+[tool.isort]
+line_length = 80
+known_local_folder = []
+
 [tool.ruff]
 line-length = 80
 indent-width = 4
