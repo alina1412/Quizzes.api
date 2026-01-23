@@ -78,7 +78,7 @@ class Player(Base):
     )
 
 
-class Rounds(Base):
+class Round(Base):
     __tablename__ = "round"
 
     id: Mapped[int] = mapped_column(init=False, primary_key=True)

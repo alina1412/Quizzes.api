@@ -15,7 +15,7 @@ from service.db_setup.models import (
     Answer,
     Player,
     Question,
-    Rounds,
+    Round,
     TgUpdate,
     User,
 )
@@ -131,7 +131,7 @@ class AnswerDb:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    async def add_answer(self, vals) -> int | None:
+    async def add_answer(self, vals: dict) -> int | None:
         try:
             answer = Answer(**vals)
             self.session.add(answer)
@@ -240,7 +240,7 @@ class GameDb:
             .order_by(sa.func.random())
             .limit(amount)
         )
-        query_insert_rounds = sa.insert(Rounds).from_select(
+        query_insert_rounds = sa.insert(Round).from_select(
             ["question_id", "player_id"], sub_query_choice
         )
         try:
@@ -250,12 +250,12 @@ class GameDb:
             raise err
 
     async def delete_old_rounds(self, user_tg_id: int) -> None:
-        query = sa.delete(Rounds).where(
-            *(Rounds.asked == true(), Rounds.player_id == user_tg_id)
+        query = sa.delete(Round).where(
+            *(Round.asked == true(), Round.player_id == user_tg_id)
         )
         await self.session.execute(query)
 
-    async def raise_score(self, user_tg_id: int) -> int | None:
+    async def raise_players_score(self, user_tg_id: int) -> int | None:
         player_result = (
             (
                 await self.session.execute(
@@ -272,8 +272,8 @@ class GameDb:
         return player_result.score
 
     async def get_next_question_id(self, user_tg_id: int) -> int | None:
-        query = sa.select(Rounds.question_id).where(
-            Rounds.player_id == user_tg_id, Rounds.asked == false()
+        query = sa.select(Round.question_id).where(
+            Round.player_id == user_tg_id, Round.asked == false()
         )
         result = await self.session.execute(query)
         return result.scalars().first()
@@ -282,10 +282,10 @@ class GameDb:
         self, question_id: int, user_tg_id: int
     ) -> None:
         query = (
-            sa.update(Rounds)
+            sa.update(Round)
             .where(
-                Rounds.player_id == user_tg_id,
-                Rounds.question_id == question_id,
+                Round.player_id == user_tg_id,
+                Round.question_id == question_id,
             )
             .values(asked=true())
         )

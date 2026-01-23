@@ -1,16 +1,21 @@
-run:
-	poetry run python -m service
-	
+
 
 ifdef OS
 	docker_up = docker compose up -d
 	docker_down = docker compose down --volumes
 else
-	docker_up = sudo docker compose up -d
-	docker_down = sudo docker compose down
+	docker_up = docker compose up -d
+	docker_down = docker compose down
 endif
 
+run:
+	poetry run python -m service
 
+up:
+	$(docker_up)
+
+down:
+	$(docker_down)
 
 renew:
 	poetry run alembic -c alembic.ini downgrade -1
@@ -32,6 +37,10 @@ lint:
 
 isort:
 	poetry run isort service
+
+format:
+	uv run ruff format service
+	uv run ruff check --fix service
 
 req:
 	poetry export -f requirements.txt --without-hashes --output ./requirements.txt

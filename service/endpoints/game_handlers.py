@@ -96,7 +96,7 @@ async def edit_player_score(
 ):
     """Request for edit_score."""
     db_game = GameDb(session)
-    score = await db_game.raise_score(params.tg_id)
+    score = await db_game.raise_players_score(params.tg_id)
     return {"success": "1", "score": score}
 
 
