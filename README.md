@@ -1,17 +1,28 @@
-## About
-FastApi educational service for answering quizzes.
+# Quiz Service API 
+A FastAPI-based educational service for managing quizzes and tracking player scores. This REST API powers a Telegram bot (in a separate project) that delivers interactive quiz tasks to users.
 
-It's an edit version of my other study project where telegram bot uses these handlers.
+## 🔗 Related Projects
+This API is designed to work with:
+https://github.com/alina1412/fastapi_tests_with_telegram_bot
+(It's a previous version of a project)
 
+## Api
 - handlers for adding questions and answers (it can be several correct answers for one question, but for telegram it would be only one button)
 - admin handlers for getting info of tests (quiz)
 - handler for checking answer with correct answers
 - handler to see score of a player (with particular telegram chat id)
+  
 
 ![handlers](https://github.com/user-attachments/assets/d8df1182-6bb8-4052-99ec-aa0122729530)
 
-## Stack
-FastApi, sqlalchemy, postgres, alembic, docker, poetry
+## 🛠️ Tech Stack
+- Framework:	FastAPI
+- Database:	PostgreSQL
+- ORM:	SQLAlchemy (async)
+- Migrations:	Alembic
+- Containerization:	Docker
+- Package Manager:	Poetry
+- Python Version:	3.11+
 
 ## Schema
 
