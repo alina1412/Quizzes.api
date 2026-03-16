@@ -1,14 +1,11 @@
+import sqlalchemy as sa
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from service.config import logger
-from service.db_setup.models import (
+from service.db_setup.models import (  # Player,; Rounds,; TgUpdate,; User,
     Answer,
-    # Player,
     Question,
-    # Rounds,
-    # TgUpdate,
-    # User,
 )
 from service.db_setup.schemas import AnswerDto, QuestionDto
 from service.db_watchers import AnswerDb, QuestionDb
@@ -68,8 +65,10 @@ class QuestionsManager:
     async def get_question_by_id(self, id_: int) -> QuestionDto | None:
         return await QuestionDb(self.session).get_question_by_id(id_)
 
-    async def get_questions(self, data: QuestionListRequest) -> list[Question]:
-        return await QuestionDb(self.session).get_questions(data)
+    async def get_questions(self, data) -> list[Question]:
+        query = sa.select(Question)
+        result = await self.session.execute(query)
+        return result.scalars().all()
 
     def convert_quiz_response(self, res) -> dict:
         responses = {}

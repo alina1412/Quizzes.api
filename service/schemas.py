@@ -2,6 +2,7 @@ import enum
 from datetime import datetime
 from typing import Any
 
+from fastapi import Query
 from pydantic import BaseModel, Field, RootModel
 
 
@@ -15,15 +16,42 @@ class QuestionOrderSchema(str, enum.Enum):  # noqa: UP042 enum.StrEnum for 3.11
     updated_dt = "updated_dt"
 
 
+class QuestionOrderEnum(str, enum.Enum):
+    ID = "id"
+    CREATED_AT = "created_at"
+    TEXT = "text"
+
+
 class QuestionListRequest(BaseModel):
     question_id: int | None = Field(description="id of a question", default=0)
     text: str | None = Field(description="search by text", default=None)
     active: int | None = Field(description="if question is active", default=1)
-    order: QuestionOrderSchema | None = Field(
-        description="order of results", default="id"
-    )
-    offset: int | None = Field(description="offset to show on page", default=0)
-    limit: int | None = Field(description="limit to show on page", default=50)
+    # order: str | None = Field(
+    #     default="id",
+    #     description="order of results"
+    # )
+    # offset: int | None = Field(description="offset to show on page", default=0)
+    # limit: int | None = Field(description="limit to show on page", default=50)
+
+    @classmethod
+    def as_query(
+        cls,
+        question_id: int | None = Query(None, description="id of a question"),
+        text: str | None = Query(None, description="search by text"),
+        active: int | None = Query(1, description="if question is active"),
+        # order: str | None = Query(
+        #     "id",
+        #     description="order of results"
+        # ),
+        # offset: int | None = Query(0, description="offset to show on page"),
+        # limit: int | None = Query(50, description="limit to show on page"),
+    ):
+        return cls(
+            question_id=question_id,
+            text=text,
+            active=active,
+            #    order=order, offset=offset, limit=limit
+        )
 
     class Config:
         json_schema_extra = {

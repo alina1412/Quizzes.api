@@ -14,7 +14,7 @@ async def test_get_quiz_returns_questions(client, monkeypatch):
 
     monkeypatch.setattr(dh, "QuestionsManager", FakeQM)
 
-    resp = client.get("/v1/quiz")
+    resp = await client.get("/v1/quiz")
     assert resp.status_code == 200
     data = resp.json()
     assert "1" in data
@@ -34,7 +34,7 @@ async def test_get_quiz_no_data_returns_empty(client, monkeypatch):
 
     monkeypatch.setattr(dh, "QuestionsManager", FakeQMNone)
 
-    resp = client.get("/v1/quiz")
+    resp = await client.get("/v1/quiz")
     assert resp.status_code == 200
     assert resp.json() == {}
 
@@ -59,7 +59,9 @@ async def test_get_questions_returns_list(client, monkeypatch):
 
     monkeypatch.setattr(dh, "QuestionsManager", FakeQM)
 
-    resp = client.get("/v1/questions")
+    resp = await client.get(
+        "/v1/questions?question_id=1&text=text+text&active=1"
+    )
     assert resp.status_code == 200
     data = resp.json()
     assert isinstance(data, list)
@@ -79,7 +81,26 @@ async def test_get_questions_empty_list(client, monkeypatch):
 
     monkeypatch.setattr(dh, "QuestionsManager", FakeQM)
 
-    resp = client.get("/v1/questions")
+    resp = await client.get("/v1/questions")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert isinstance(data, list)
+    assert not data
+
+
+@pytest.mark.asyncio
+async def test_get_questions_handler(client):
+    params = {
+        "question_id": 1,
+        "text": "Sample question?",
+        "active": 1,
+        # "order": "id",
+        # "offset": 0,
+        # "limit": 50,
+    }
+    resp = await client.get(
+        "/v1/questions" + "?" + "&".join(f"{k}={v}" for k, v in params.items())
+    )
     assert resp.status_code == 200
     data = resp.json()
     assert isinstance(data, list)

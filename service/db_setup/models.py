@@ -1,15 +1,9 @@
 from datetime import datetime
 
 import sqlalchemy as sa
-from sqlalchemy import (
-    BigInteger,
-    Boolean,
-    ForeignKey,
-    Integer,
-    String,
-    Text,  # DateTime, TIMESTAMP
-    text as sa_text,
-)
+from sqlalchemy import Text  # DateTime, TIMESTAMP
+from sqlalchemy import BigInteger, Boolean, ForeignKey, Integer, String
+from sqlalchemy import text as sa_text
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,

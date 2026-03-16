@@ -1,8 +1,9 @@
 {
     "python.testing.pytestArgs": [
-        "tests", "-svx"
+        "tests", 
+        "-svx"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "python.testing.autoTestDiscoverOnSaveEnabled": false,
+    "python.testing.autoTestDiscoverOnSaveEnabled": false
 }

@@ -53,12 +53,16 @@ async def show_quiz(
     },
 )
 async def get_questions(
-    data=Depends(QuestionListRequest),
+    data=Depends(QuestionListRequest.as_query),
+    # question_id: int | None = Query(None, description="id of a question"),
+    # text: str | None = Query(None, description="search by text"),
+    # active: int | None = Query(1, description="if question is active"),
     session: AsyncSession = Depends(get_session),
 ) -> list[QuestionResponse]:
     """Get_questions."""
     q_manager = QuestionsManager(session)
-    questions = await q_manager.get_questions(data)
+    data = ""  # Not used
+    questions = await q_manager.get_questions(data=None)
     return questions if questions else []
 
 

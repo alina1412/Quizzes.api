@@ -9,9 +9,7 @@ from typing import Sequence, Union
 
 import sqlalchemy as sa
 from alembic import op
-
 from sqlalchemy.engine.reflection import Inspector
-
 
 conn = op.get_bind()
 inspector = Inspector.from_engine(conn)
